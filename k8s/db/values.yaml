@@ -1,0 +1,8 @@
+global:
+  postgresql:
+    postgresqlDatabase: otus-hw
+    postgresqlUsername: otus-hw
+    postgresqlPassword: otus-hw
+service:
+  type: NodePort
+  nodePort: 5432
