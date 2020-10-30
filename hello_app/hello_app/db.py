@@ -13,8 +13,8 @@ metadata = MetaData()
 async def init_db(app):
     dsn = construct_db_url(app['config']['database'])
     pool = await asyncpgsa.create_pool(dsn=dsn)
-    # engine = create_engine(dsn)
-    # metadata.create_all(bind=engine, tables=[users])
+    engine = create_engine(dsn)
+    metadata.create_all(bind=engine, tables=[users])
     app['db_pool'] = pool
     return pool
 
