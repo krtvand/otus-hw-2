@@ -37,7 +37,6 @@ users = Table(
     Column('id', Integer, primary_key=True),
     Column('username', String(64), nullable=False, unique=True),
     Column('email', String(120)),
-    Column('password_hash', String(128), nullable=False)
 )
 
 
@@ -51,4 +50,5 @@ async def get_users(conn):
 
 async def create_user(conn, username, email):
     stmt = users.insert().values(username=username, email=email)
-    await conn.execute(stmt)
+    res = await conn.execute(stmt)
+    return {}

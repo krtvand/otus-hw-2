@@ -5,43 +5,8 @@ from aiohttp import web
 
 from hello_app import db
 from hello_app.db import init_db
+from hello_app import views
 
-
-async def handle(request):
-    name = request.match_info.get('name', "Anonymous")
-    text = "Hello, " + name
-    return web.Response(text=text)
-
-
-async def health(request):
-    return web.Response(text='{"status": "OK"}')
-
-
-async def liveness(request):
-    return web.Response(text='{"status": "OK"}')
-
-
-async def readiness(request):
-    return web.Response(text='{"status": "OK"}')
-
-
-async def get_user_list(request):
-
-    async with request.app['db_pool'].acquire() as conn:
-        users = await db.get_users(conn)
-
-    result = []
-    for u in users:
-        result.append({'id': u['id']})
-
-    return web.json_response(result)
-
-
-async def get_user(request):
-    name = request.match_info.get('name')
-    text = "Hello, " + name
-
-    return web.json_response({'name': '', 'id': 1})
 
 
 FLASK_ENV = environ.get('FLASK_ENV')
@@ -64,12 +29,13 @@ def load_config():
 def setup_routes(app):
     app.add_routes(
         [
-            web.get('/', handle),
-            web.get('/health', health),
-            web.get('/liveness', liveness),
-            web.get('/readiness', readiness),
-            web.get('/user', get_user_list),
-            web.get('/user/{name}', get_user),
+            web.get('/', views.handle),
+            web.get('/health', views.health),
+            web.get('/liveness', views.liveness),
+            web.get('/readiness', views.readiness),
+            web.get('/user', views.get_user_list),
+            web.get('/user/{name}', views.get_user),
+            web.post('/user', views.create_user),
         ]
     )
 
