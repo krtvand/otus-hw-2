@@ -5,4 +5,4 @@ global:
     postgresqlPassword: otus-hw
 service:
   type: NodePort
-  nodePort: 5432
+  nodePort: 30001

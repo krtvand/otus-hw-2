@@ -54,7 +54,7 @@ def load_config():
         DB_PASS=environ.get('DB_PASS', 'otus-hw'),
         DB_NAME=environ.get('DB_NAME', 'otus-hw'),
         DB_HOST=environ.get('DB_HOST', 'otus-hw'),
-        DB_PORT=environ.get('DB_PORT', 31752),
+        DB_PORT=int(environ.get('DB_PORT', 30001))
     )
     conf['database'] = db_conf
 

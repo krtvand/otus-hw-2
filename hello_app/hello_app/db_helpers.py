@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, MetaData
+from sqlalchemy import create_engine, MetaData, exc
 
 from hello_app.db import construct_db_url
 from hello_app.db import users
@@ -63,17 +63,20 @@ def create_sample_data(target_config=None):
     engine = get_engine(target_config)
 
     with engine.connect() as conn:
-        conn.execute(users.insert(), [
-            {'username': 'Adam',
-             'email': 'adam@one.com',
-             'password_hash': 'adam'},
-            {'username': 'Bob',
-             'email': 'bob@two.com',
-             'password_hash': 'bob'},
-        ])
+        try:
+            conn.execute(users.insert(), [
+                {'username': 'Adam',
+                 'email': 'adam@one.com',
+                 'password_hash': 'adam'},
+                {'username': 'Bob',
+                 'email': 'bob@two.com',
+                 'password_hash': 'bob'},
+            ])
+        except exc.IntegrityError:
+            pass
 
 
-if __name__ == '__main__':
+def main():
     user_db_config = load_config()['database']
     admin_db_config = load_config()['database']
 
@@ -117,3 +120,6 @@ if __name__ == '__main__':
     #     create_sample_data(target_config=user_db_config)
     # else:
     #     parser.print_help()
+
+if __name__ == '__main__':
+    main()

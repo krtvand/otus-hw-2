@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otus-hw-deployment
+  labels:
+    app: otus-hw
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: otus-hw
+  template:
+    metadata:
+      labels:
+        app: otus-hw
+    spec:
+      containers:
+      - name: otus-hw
+        image: krtvand/otus-hw:2.3
+        ports:
+        - containerPort: 8000
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 8000
+        env:
+          - name: DB_USER
+            valueFrom:
+              configMapKeyRef:
+                name: otus-hw-config-map
+                key: db.user
+          - name: DB_PASS
+            valueFrom:
+              configMapKeyRef:
+                name: otus-hw-config-map
+                key: db.pass
+          - name: DB_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: otus-hw-config-map
+                key: db.name
+          - name: DB_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: otus-hw-config-map
+                key: db.host
+          - name: DB_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: otus-hw-config-map
+                key: db.port
+

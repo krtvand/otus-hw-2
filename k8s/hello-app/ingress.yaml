@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: otus-hw-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+
+spec:
+  rules:
+  - host: "arch.homework"
+    http:
+      paths:
+      - path: /otusapp/a-kartaev($|/)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: otus-hw-service
+            port:
+              number: 8000

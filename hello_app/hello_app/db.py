@@ -3,7 +3,7 @@ from os import environ
 import asyncpgsa
 from sqlalchemy import (
     MetaData, Table, Column, ForeignKey,
-    Integer, String, DateTime
+    Integer, String, DateTime, create_engine
 )
 from sqlalchemy.sql import select
 
