@@ -38,14 +38,14 @@ async def get_user_list(request):
 
 
 async def get_user(request):
-    name = request.match_info.get('name')
-    text = "Hello, " + name
+    name = request.match_info.get('id')
 
     return web.json_response({'name': '', 'id': 1})
 
+
 async def create_user(request: web.Request):
     data = await request.json()
-    async with request.app['db_pool'].acquire() as conn:
+    async with request.app['db'].acquire() as conn:
         user = await db.create_user(conn, username=data['name'], email=data['email'])
-    return web.json_response({'name': data['name'], 'id': 1})
+    return web.json_response(user)
 

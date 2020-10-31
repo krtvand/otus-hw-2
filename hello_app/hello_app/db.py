@@ -1,22 +1,35 @@
 from os import environ
 
 import asyncpgsa
+from aiopg.sa import SAConnection
 from sqlalchemy import (
     MetaData, Table, Column, ForeignKey,
     Integer, String, DateTime, create_engine
 )
+import aiopg.sa
 from sqlalchemy.sql import select
+from sqlalchemy.sql.ddl import CreateTable
 
 metadata = MetaData()
 
 
 async def init_db(app):
-    dsn = construct_db_url(app['config']['database'])
-    pool = await asyncpgsa.create_pool(dsn=dsn)
-    engine = create_engine(dsn)
-    metadata.create_all(bind=engine, tables=[users])
-    app['db_pool'] = pool
-    return pool
+    config = app['config']['database']
+    engine = await aiopg.sa.create_engine(
+        database=config['DB_NAME'],
+        user=config['DB_USER'],
+        password=config['DB_PASS'],
+        host=config['DB_HOST'],
+        port=config['DB_PORT'],
+    )
+    app['db'] = engine
+
+    # create_tables
+    return engine
+
+
+async def create_tables(conn: SAConnection) -> None:
+    await conn.execute(CreateTable(users))
 
 
 def construct_db_url(config):
@@ -47,8 +60,25 @@ async def get_users(conn):
     return records
 
 
-
 async def create_user(conn, username, email):
-    stmt = users.insert().values(username=username, email=email)
-    res = await conn.execute(stmt)
-    return {}
+    stmt = users.insert().values(username=username, email=email).returning(users.c.id)
+    response = await conn.execute(stmt)
+    result = await response.fetchone()
+
+    return {'id': result[0], 'name': username, 'email': email}
+
+
+async def update_user(conn, params):
+    res = await conn.execute(
+        users.update()
+        .returning(*users.c)
+        .values(params)
+    )
+    record = await res.fetchone()
+    if not record:
+        msg = "Question does not exists"
+        raise RecordNotFound(msg)
+
+
+class RecordNotFound(Exception):
+    pass
