@@ -51,3 +51,10 @@ async def create_user(request: web.Request):
         user = await db.create_user(conn, username=data['name'], email=data['email'])
     return web.json_response(user)
 
+
+async def update_user(request: web.Request):
+    data = await request.json()
+    user_id = data.pop('id')
+    async with request.app['db'].acquire() as conn:
+        res = await db.update_user(conn, user_id=user_id, **data)
+    return web.json_response(res)

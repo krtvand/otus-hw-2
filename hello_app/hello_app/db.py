@@ -3,8 +3,14 @@ from os import environ
 import asyncpgsa
 from aiopg.sa import SAConnection
 from sqlalchemy import (
-    MetaData, Table, Column, ForeignKey,
-    Integer, String, DateTime, create_engine
+    MetaData,
+    Table,
+    Column,
+    ForeignKey,
+    Integer,
+    String,
+    DateTime,
+    create_engine,
 )
 import aiopg.sa
 from sqlalchemy.sql import select
@@ -43,10 +49,9 @@ def construct_db_url(config):
     )
 
 
-
 users = Table(
-    'users', metadata,
-
+    'users',
+    metadata,
     Column('id', Integer, primary_key=True),
     Column('username', String(64), nullable=False, unique=True),
     Column('email', String(120)),
@@ -54,37 +59,42 @@ users = Table(
 
 
 async def get_user(conn, user_id):
-    records = await conn.execute(
-        users.select().where(users.c.id == user_id)
-    )
+    records = await conn.execute(users.select().where(users.c.id == user_id))
     r = await records.first()
     return {'id': r[0], 'name': r[1], 'email': r[2]}
 
+
 async def get_users(conn):
-    records = await conn.fetch(
-        users.select().order_by(users.c.id)
-    )
+    records = await conn.fetch(users.select().order_by(users.c.id))
     return records
 
 
 async def create_user(conn, username, email):
-    stmt = users.insert().values(username=username, email=email).returning(users.c.id)
+    stmt = (
+        users.insert()
+        .values(username=username, email=email)
+        .returning(users.c.id)
+    )
     response = await conn.execute(stmt)
     result = await response.fetchone()
 
     return {'id': result[0], 'name': username, 'email': email}
 
 
-async def update_user(conn, params):
+async def update_user(conn, user_id, name, email):
     res = await conn.execute(
-        users.update()
+        users
+        .update()
+        .where(users.c.id == user_id)
         .returning(*users.c)
-        .values(params)
+        .values(username=name, email=email)
     )
     record = await res.fetchone()
     if not record:
-        msg = "Question does not exists"
+        msg = "User does not exists"
         raise RecordNotFound(msg)
+    return {'id': record[0], 'name': record[1], 'email': record[2]}
+
 
 
 class RecordNotFound(Exception):
