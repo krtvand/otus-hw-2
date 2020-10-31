@@ -53,6 +53,13 @@ users = Table(
 )
 
 
+async def get_user(conn, user_id):
+    records = await conn.execute(
+        users.select().where(users.c.id == user_id)
+    )
+    r = await records.first()
+    return {'id': r[0], 'name': r[1], 'email': r[2]}
+
 async def get_users(conn):
     records = await conn.fetch(
         users.select().order_by(users.c.id)

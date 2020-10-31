@@ -34,7 +34,7 @@ def setup_routes(app):
             web.get('/liveness', views.liveness),
             web.get('/readiness', views.readiness),
             web.get('/user', views.get_user_list),
-            web.get('/user/{name}', views.get_user),
+            web.get('/user/{id}', views.get_user),
             web.post('/user', views.create_user),
         ]
     )

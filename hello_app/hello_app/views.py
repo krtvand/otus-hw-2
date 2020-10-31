@@ -38,9 +38,11 @@ async def get_user_list(request):
 
 
 async def get_user(request):
-    name = request.match_info.get('id')
+    user_id = request.match_info.get('id')
+    async with request.app['db'].acquire() as conn:
+        u = await db.get_user(conn, user_id=user_id)
 
-    return web.json_response({'name': '', 'id': 1})
+    return web.json_response(u)
 
 
 async def create_user(request: web.Request):
