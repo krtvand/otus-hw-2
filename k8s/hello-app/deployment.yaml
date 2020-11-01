@@ -49,4 +49,14 @@ spec:
               secretKeyRef:
                 name: otus-hw-secret
                 key: db.port
+          - name: HOST
+            valueFrom:
+              configMapKeyRef:
+                name: otus-hw-config-map
+                key: hello-app.host
+          - name: PORT
+            valueFrom:
+              configMapKeyRef:
+                name: otus-hw-config-map
+                key: hello-app.port
 
