@@ -27,7 +27,7 @@ async def readiness(request):
 
 async def get_user_list(request):
 
-    async with request.app['db_pool'].acquire() as conn:
+    async with request.app['db'].acquire() as conn:
         users = await db.get_users(conn)
 
     result = []
@@ -62,9 +62,16 @@ async def create_user(request: web.Request):
 
 async def update_user(request: web.Request):
     data = await request.json()
-    user_id = data.pop('id')
+    user_id = request.match_info.get('id')
+    name = data.get('name')
+    params = {}
+    if name:
+        params['username'] = name
+    email = data.get('name')
+    if email:
+        params['email'] = email
     async with request.app['db'].acquire() as conn:
-        res = await db.update_user(conn, user_id=user_id, **data)
+        res = await db.update_user(conn, user_id=user_id, **params)
     return web.json_response(res)
 
 

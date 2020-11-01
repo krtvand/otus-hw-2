@@ -11,6 +11,7 @@ install_requires = [
     'asyncpg',
     'asyncpgsa',
     'psycopg2',
+    'aiopg',
 ]
 
 setup(
