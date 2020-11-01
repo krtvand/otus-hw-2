@@ -67,7 +67,7 @@ async def update_user(request: web.Request):
     params = {}
     if name:
         params['username'] = name
-    email = data.get('name')
+    email = data.get('email')
     if email:
         params['email'] = email
     async with request.app['db'].acquire() as conn:
