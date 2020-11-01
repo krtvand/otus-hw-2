@@ -36,6 +36,7 @@ def setup_routes(app):
             web.get('/user', views.get_user_list),
             web.get('/user/{id}', views.get_user),
             web.put('/user/{id}', views.update_user),
+            web.delete('/user/{id}', views.delete_user),
             web.post('/user', views.create_user),
         ]
     )

@@ -3,8 +3,5 @@ kind: ConfigMap
 metadata:
   name: otus-hw-config-map
 data:
-  db.host: otus-hw-db-postgresql.otus.svc.cluster.local
-  db.port: "5432"
-  db.name: otus-hw
-  db.user: otus-hw
-  db.pass: otus-hw
+  hello-app.host: "0.0.0.0"
+  hello-app.port: "8000"

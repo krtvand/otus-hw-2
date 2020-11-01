@@ -45,6 +45,14 @@ async def get_user(request):
     return web.json_response(u)
 
 
+async def delete_user(request):
+    user_id = request.match_info.get('id')
+    async with request.app['db'].acquire() as conn:
+        await db.delete_user(conn, user_id=user_id)
+
+    return web.json_response({'id': user_id})
+
+
 async def create_user(request: web.Request):
     data = await request.json()
     async with request.app['db'].acquire() as conn:
@@ -58,3 +66,5 @@ async def update_user(request: web.Request):
     async with request.app['db'].acquire() as conn:
         res = await db.update_user(conn, user_id=user_id, **data)
     return web.json_response(res)
+
+

@@ -96,6 +96,13 @@ async def update_user(conn, user_id, name, email):
     return {'id': record[0], 'name': record[1], 'email': record[2]}
 
 
+async def delete_user(conn, user_id):
+    await conn.execute(
+        users
+        .delete()
+        .where(users.c.id == user_id)
+    )
+
 
 class RecordNotFound(Exception):
     pass
