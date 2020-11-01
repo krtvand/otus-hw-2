@@ -81,13 +81,13 @@ async def create_user(conn, username, email):
     return {'id': result[0], 'name': username, 'email': email}
 
 
-async def update_user(conn, user_id, name, email):
+async def update_user(conn, user_id, **params):
     res = await conn.execute(
         users
         .update()
         .where(users.c.id == user_id)
         .returning(*users.c)
-        .values(username=name, email=email)
+        .values(**params)
     )
     record = await res.fetchone()
     if not record:

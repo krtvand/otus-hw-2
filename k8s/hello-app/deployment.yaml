@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: otus-hw
-        image: krtvand/otus-hw:2.6
+        image: krtvand/otus-hw:2.8
         ports:
         - containerPort: 8000
         livenessProbe:
