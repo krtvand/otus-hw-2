@@ -4,6 +4,9 @@ scripts/build-push.sh
 
 ## install with kube
 
+### prerequirements
+minikube addons enable ingress
+
 ### install db
 helm install otus-hw-db bitnami/postgresql -f k8s/db/values.yaml
 
