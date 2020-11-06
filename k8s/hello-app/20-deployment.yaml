@@ -14,6 +14,27 @@ spec:
       labels:
         app: otus-hw
     spec:
+      initContainers:
+        - name: check-db-ready
+          image: postgres:latest
+          command:
+            - sh
+            - "-c"
+            - |
+              until pg_isready -h $DB_HOST  -p  $DB_PORT;
+              do echo waiting for database; sleep 1; done;
+          env:
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: otus-hw-secret
+                  key: db.host
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: otus-hw-secret
+                  key: db.port
+
       containers:
       - name: otus-hw
         image: krtvand/otus-hw:2.9
