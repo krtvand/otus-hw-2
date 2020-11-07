@@ -8,10 +8,8 @@ install_requires = [
     'pytoml',
     'aiohttp_security[session]',
     'sqlalchemy',
-    'asyncpg',
-    'asyncpgsa',
     'psycopg2',
-    'aiopg',
+    'aiopg[sa]',
 ]
 
 setup(

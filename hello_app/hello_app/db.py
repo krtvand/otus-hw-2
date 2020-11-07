@@ -1,6 +1,5 @@
 from os import environ
 
-import asyncpgsa
 from aiopg.sa import SAConnection
 from sqlalchemy import (
     MetaData,
@@ -65,8 +64,10 @@ async def get_user(conn, user_id):
 
 
 async def get_users(conn):
-    records = await conn.fetch(users.select().order_by(users.c.id))
-    return records
+    cursor = await conn.execute(users.select().order_by(users.c.id))
+    rows = await cursor.fetchall()
+
+    return [{'id': r[0], 'name': r[1], 'email': r[2]} for r in rows]
 
 
 async def create_user(conn, username, email):

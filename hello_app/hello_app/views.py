@@ -30,11 +30,7 @@ async def get_user_list(request):
     async with request.app['db'].acquire() as conn:
         users = await db.get_users(conn)
 
-    result = []
-    for u in users:
-        result.append({'id': u['id']})
-
-    return web.json_response(result)
+    return web.json_response(users)
 
 
 async def get_user(request):
