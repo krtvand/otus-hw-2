@@ -9,16 +9,13 @@ from hello_app import views
 
 
 
-FLASK_ENV = environ.get('FLASK_ENV')
-
-
 def load_config():
     conf = {}
     db_conf = dict(
         DB_USER=environ.get('DB_USER', 'otus-hw'),
         DB_PASS=environ.get('DB_PASS', 'otus-hw'),
         DB_NAME=environ.get('DB_NAME', 'otus-hw'),
-        DB_HOST=environ.get('DB_HOST', 'otus-hw'),
+        DB_HOST=environ.get('DB_HOST', 'otus-hw').strip(),
         DB_PORT=int(environ.get('DB_PORT', 30001))
     )
     conf['database'] = db_conf

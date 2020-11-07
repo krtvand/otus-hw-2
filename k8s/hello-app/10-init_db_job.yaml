@@ -28,6 +28,7 @@ spec:
       containers:
       - name: otus-hw
         image: krtvand/otus-hw:2.9
+        imagePullPolicy: IfNotPresent
         command: ["init_db"]
         env:
           - name: DB_USER

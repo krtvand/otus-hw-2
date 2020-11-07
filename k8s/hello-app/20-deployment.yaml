@@ -38,6 +38,7 @@ spec:
       containers:
       - name: otus-hw
         image: krtvand/otus-hw:2.9
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8000
         livenessProbe:

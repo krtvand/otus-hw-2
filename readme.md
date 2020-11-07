@@ -5,7 +5,14 @@ scripts/build-push.sh
 ## install with kube
 
 ### prerequirements
+#### create namespace
+kubectl apply -f k8s/namespace_otus.json
+kubectl config set-context --current --namespace=otus
+
+
+#### enable ingress
 minikube addons enable ingress
+
 
 ### install db
 helm install otus-hw-db bitnami/postgresql -f k8s/db/values.yaml
