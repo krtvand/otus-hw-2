@@ -27,7 +27,7 @@ spec:
                   key: db.port
       containers:
       - name: otus-hw
-        image: krtvand/otus-hw:2.9
+        image: krtvand/otus-hw:2.11
         imagePullPolicy: IfNotPresent
         command: ["init_db"]
         env:
