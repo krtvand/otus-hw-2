@@ -13,7 +13,7 @@ spec:
             - "-c"
             - |
               until pg_isready -h $DB_HOST  -p  $DB_PORT;
-              do echo waiting for database; sleep 1; done;
+              do echo waiting for database; sleep 0.1; done;
           env:
             - name: DB_HOST
               valueFrom:
